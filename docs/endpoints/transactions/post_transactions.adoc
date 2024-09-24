@@ -6,7 +6,7 @@ Create a transaction by providing an amount and a description.
 
 [source,subs="verbatim,quotes"]
 ----
-*[teal]#POST#* /api/movies/
+*[teal]#POST#* /api/transactions/
 ----
 
 include::../common/headers.adoc[]
@@ -39,6 +39,8 @@ Content-Type: application/json
 [source,json]
 ----
 {
-    //FIXME: Update example
+    "redirect_url": "https://demo.vivapayments.com/web/checkout?ref=xxx&color=00BFFF",
+    "status": "pending",
+    "id": "8948f8bb-0c6f-45f0-bbfe-3fed217be9e7"
 }
 ----

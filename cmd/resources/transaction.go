@@ -13,5 +13,5 @@ type Transaction struct {
 	Amount      float64   `json:"amount"`
 	OrderStatus string    `json:"order_status"`
 	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	UpdatedAt   time.Time `json:"updated_at,omitempty"`
 }

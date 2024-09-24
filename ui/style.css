@@ -66,20 +66,94 @@ nav {
 input, textarea, select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+textarea {
+    resize: none; /* Disable resizing */
+    box-sizing: border-box; /* Ensure the padding and border are included in the element's total width/height */
 }
 
 input, textarea {
     width: 90%;
 }
 
-#sort-options {
+.amount-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.amount-container input {
+    flex: 1;
+}
+
+.amount-container button {
+    white-space: nowrap;
+}
+
+.transaction-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+.tr-form-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+}
+
+#add-transaction-btn {
+    align-self: flex-end;
+}
+
+#welcome-message {
+    font-weight: bold;
+    color: white;
+}
+
+#qr-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+}
+
+#qr-modal.hidden {
+    display: none;
+}
+
+#qr-code {
     margin-bottom: 20px;
 }
 
-.movie {
+.transaction {
     background-color: var(--card-background);
     border-radius: 8px;
     padding: 20px;
@@ -87,12 +161,12 @@ input, textarea {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.movie h3 {
+.transaction h3 {
     color: var(--primary-color);
     margin-top: 0;
 }
 
-.movie-actions {
+.transaction-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -116,17 +190,12 @@ input, textarea {
     gap: 5px;
 }
 
-#welcome-message {
-    font-weight: bold;
-    color: white;
-}
-
 @media (max-width: 600px) {
     .container {
         padding: 10px;
     }
 
-    .movie {
+    .transaction {
         padding: 15px;
     }
 }

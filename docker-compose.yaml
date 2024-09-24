@@ -25,7 +25,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      MYSQL_DSN: root:password@tcp(mysql:3306)/safe_size_db?parseTime=true&sql_mode=NO_ZERO_DATE
+      MYSQL_DSN: "root:test@tcp(mysql:3306)/safe_size_db?parseTime=true&sql_mode=NO_ZERO_DATE"
+      VIVA_PASSWORD: ${VIVA_PASSWORD}
+      VIVA_USERNAME: ${VIVA_USERNAME}
+      VIVA_BASE_ACCOUNTS_URL: ${VIVA_BASE_ACCOUNTS_URL}
+      VIVA_BASE_API_URL: ${VIVA_BASE_API_URL}
+      VIVA_REDIRECT_URL: ${VIVA_REDIRECT_URL}
     volumes:
       - .:/safe-size-pay
     depends_on:

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Safe Size Payments</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -21,9 +22,8 @@
         <button id="logout-btn" class="btn hidden">Logout</button>
     </nav>
     <main>
-<!-- FIXME: -->
-        <div id="add-transaction-form" class="form-container hidden">
-            <h2>Add a Payment</h2>
+        <div id="add-transaction-form" class="form-container tr-form-panel hidden">
+            <h2>Make a Payment</h2>
 
             <div class="amount-container">
                 <input type="text" id="transaction-amount" placeholder="Amount" readonly required>
@@ -31,22 +31,13 @@
             </div>
 
             <textarea id="transaction-description" placeholder="Description" required></textarea>
-
-            <button id="add-transaction-btn" class="btn">Add Payment</button>
+            <button id="add-transaction-btn" class="btn">Make Payment</button>
         </div>
-
-
-<!--        FIXME: REMOVE ? OR KEEP SORTING FOR -->
-        <div id="sort-options" class="hidden">
-            <label for="sort-select">Sort by:</label>
-            <select id="sort-select">
-                <option value="date">Date</option>
-                <option value="likes">Likes</option>
-                <option value="hates">Hates</option>
-            </select>
+        <div id="qr-modal" class="hidden">
+            <div id="qr-code"></div>
+            <p>OR <a id="qr-url" href="#" target="_blank">Click here</a> to open in a new tab.</p>
+            <button id="close-qr-btn" class="btn">Close</button>
         </div>
-
-<!--        FIXME: CHANGE TO PAYMENTS CONTAINER-->
         <div id="transactions-container"></div>
     </main>
 </div>

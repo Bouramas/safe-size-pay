@@ -91,7 +91,7 @@ func (db *DBService) CreateTransaction(description, userID string, amount float6
 		UserID:      userID,
 		OrderID:     nil,
 		Description: description,
-		Amount:      0,
+		Amount:      amount,
 		OrderStatus: constants.OrderStatusPending,
 		CreatedAt:   createdAt,
 	}, nil
@@ -100,17 +100,14 @@ func (db *DBService) CreateTransaction(description, userID string, amount float6
 // GetTransactions retrieves transactions of the specified user.
 func (db *DBService) GetTransactions(userID string) ([]*resources.Transaction, error) {
 
-	query := fmt.Sprintf("SELECT id, BIN_TO_UUID(user_id, true), order_id, order_msg, description, amount, order_status, created_at, updated_at " +
-		"FROM Transactions" +
-		"WHERE user_id = UUID_TO_BIN(?, true) " +
-		"GROUP BY id DESC")
+	query := "SELECT BIN_TO_UUID(id, true), BIN_TO_UUID(user_id, true), order_id, COALESCE(order_msg, ''), description, amount, order_status, created_at, updated_at FROM Transactions WHERE user_id=UUID_TO_BIN(?, true)"
 	rows, err := db.DB.Query(query, userID)
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving transactions: %v", err)
 	}
 
 	defer rows.Close()
-	var transactions []*resources.Transaction
+	transactions := make([]*resources.Transaction, 0)
 	for rows.Next() {
 		var t resources.Transaction
 		if err := rows.Scan(&t.ID, &t.UserID, &t.OrderID, &t.OrderMsg, &t.Description, &t.Amount, &t.OrderStatus, &t.CreatedAt, &t.UpdatedAt); err != nil {
@@ -128,10 +125,10 @@ func (db *DBService) GetTransactions(userID string) ([]*resources.Transaction, e
 
 // MarkTransactionFailed marks an existing transaction as failed
 func (db *DBService) MarkTransactionFailed(id, msg string) error {
-	query := "UPDATE Transactions SET order_status=?, order_msg=? WHERE id=UUID_TO_BIN(?,true)"
+	query := "UPDATE Transactions SET order_status=?, order_msg=? WHERE id=UUID_TO_BIN(?, true)"
 	result, err := db.DB.Exec(query, constants.OrderStatusFailed, msg, id)
 	if err != nil {
-		return fmt.Errorf("error updating Transaction: %v", err)
+		return fmt.Errorf("MarkTransactionFailed | error updating Transaction: %v", err)
 	}
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
@@ -143,13 +140,48 @@ func (db *DBService) MarkTransactionFailed(id, msg string) error {
 	return nil
 }
 
-// MarkTransactionSuccess updates an existing transaction, setting the order ID and status
-func (db *DBService) MarkTransactionSuccess(id string, orderID int) error {
-	query := "UPDATE Transactions SET order_id=?, order_status=?, WHERE id=UUID_TO_BIN(?,true)"
-	result, err := db.DB.Exec(query, orderID, constants.OrderStatusSuccess, id)
+// PatchTransactionOrderID updates an existing transaction, setting the order ID and status
+func (db *DBService) PatchTransactionOrderID(id string, orderID int) error {
+	query := "UPDATE Transactions SET order_id=? WHERE id=UUID_TO_BIN(?, true)"
+	result, err := db.DB.Exec(query, orderID, id)
 	if err != nil {
-		return fmt.Errorf("error updating Transaction: %v", err)
+		return fmt.Errorf("PatchTransactionOrderID | error updating Transaction: %v", err)
 	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking rows affected: %v", err)
+	}
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+// PatchTransactionSuccess updates an existing transaction, setting the order ID and status
+func (db *DBService) PatchTransactionSuccess(id string) error {
+	query := "UPDATE Transactions SET order_status=? WHERE id=UUID_TO_BIN(?, true)"
+	result, err := db.DB.Exec(query, constants.OrderStatusSuccess, id)
+	if err != nil {
+		return fmt.Errorf("PatchTransactionSuccess | error updating Transaction: %v", err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking rows affected: %v", err)
+	}
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+// DeleteTransactionByID deletes a transaction by its ID.
+func (db *DBService) DeleteTransactionByID(id string) error {
+	query := "DELETE FROM Transactions WHERE id=UUID_TO_BIN(?, true)"
+	result, err := db.DB.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("error deleting transaction: %v", err)
+	}
+
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return fmt.Errorf("error checking rows affected: %v", err)

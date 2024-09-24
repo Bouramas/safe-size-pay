@@ -24,7 +24,10 @@ func (s *Server) NewRouter() *mux.Router {
 
 	trRouter := apiRouter.PathPrefix("/transactions").Subrouter()
 	trRouter.HandleFunc("/", s.HandleGetTransactions()).Methods(http.MethodGet, http.MethodOptions)
+	trRouter.HandleFunc("/hook/", s.HandlePostTransactionHook()).Methods(http.MethodPost, http.MethodOptions)
+	trRouter.HandleFunc("/hook/", s.HandleGetTransactionHook()).Methods(http.MethodGet, http.MethodOptions)
 	trRouter.HandleFunc("/", s.HandlePostTransaction()).Methods(http.MethodPost, http.MethodOptions)
+	trRouter.HandleFunc("/{id}/", s.HandleDeleteTransactions()).Methods(http.MethodDelete, http.MethodOptions)
 
 	r.NotFoundHandler = r.NewRoute().BuildOnly().HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {

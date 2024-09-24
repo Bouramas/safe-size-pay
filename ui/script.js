@@ -12,40 +12,37 @@ const signupBtn = document.getElementById('signup-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const welcomeMessage = document.getElementById('welcome-message');
 const currentUserNameSpan = document.getElementById('current-user-name');
-const addMovieForm = document.getElementById('add-movie-form');
+const addTransactionForm = document.getElementById('add-transaction-form');
 const addTransactionBtn = document.getElementById('add-transaction-btn');
-const moviesContainer = document.getElementById('movies-container');
-const sortSelect = document.getElementById('sort-select');
-const sortOptions = document.getElementById('sort-options');
+const transactionsContainer = document.getElementById('transactions-container');
 const generateAmountBtn = document.getElementById('generate-amount-btn');
+const modal = document.getElementById('qr-modal');
+const qrCodeContainer = document.getElementById('qr-code');
+const qrUrl = document.getElementById('qr-url');
 
 async function updateUI() {
     if (authToken) {
         loginBtn.classList.add('hidden');
         signupBtn.classList.add('hidden');
-        sortOptions.classList.remove('hidden');
         logoutBtn.classList.remove('hidden');
-        addMovieForm.classList.remove('hidden');
+        addTransactionForm.classList.remove('hidden');
         welcomeMessage.classList.remove('hidden');
         currentUserNameSpan.textContent = currentUser;
-        await fetchAndRenderMovies();
+        await fetchAndRenderTransactions();
     } else {
         loginBtn.classList.remove('hidden');
         signupBtn.classList.remove('hidden');
         logoutBtn.classList.add('hidden');
-        sortOptions.classList.add('hidden');
         welcomeMessage.classList.add('hidden');
-        addMovieForm.classList.add('hidden');
-        moviesContainer.innerHTML = '<p>Please log in to view movies.</p>';
+        addTransactionForm.classList.add('hidden');
+        transactionsContainer.innerHTML = '<p>Please log in to view transactions.</p>';
     }
 }
 
-async function fetchAndRenderMovies(userId = null) {
+async function fetchAndRenderTransactions() {
     try {
-        let url = `${API_BASE_URL}/api/movies/`;
-        if (userId) {
-            url = `${API_BASE_URL}/api/users/${userId}/movies`;
-        }
+        let url = `${API_BASE_URL}/api/transactions/`;
+
 
         const response = await fetch(url, {
             method: 'GET',
@@ -56,14 +53,14 @@ async function fetchAndRenderMovies(userId = null) {
         });
 
         if (response.ok) {
-            const movies = await response.json();
-            renderMovies(movies);
+            const transactions = await response.json();
+            renderTransactions(transactions);
         } else {
-            throw new Error('Failed to fetch movies');
+            throw new Error('Failed to fetch transactions');
         }
     } catch (error) {
-        console.error('Error fetching movies:', error);
-        moviesContainer.innerHTML = '<p>Error loading movies. Please try again later.</p>';
+        console.error('Error fetching transactions:', error);
+        transactionsContainer.innerHTML = '<p>Error loading transactions. Please try again later.</p>';
     }
 }
 
@@ -72,139 +69,95 @@ async function generateRandomAmount() {
     amountField.value = (Math.random() * (100.0 - 0.1) + 0.1).toFixed(2);
 }
 
-function renderMovies(movies) {
-    const sortedMovies = sortMovies(movies);
-    moviesContainer.innerHTML = sortedMovies.map(movie => `
-        <div class="movie">
-            <h3>${movie.title}</h3>
-            <p>${movie.description}</p>
-            <p>Added by: <a href="#" onclick="fetchAndRenderMovies('${movie.user_id}')">${movie.user_name}</a> on ${new Date(movie.date_added).toLocaleString()}</p>
-            <div class="movie-actions">
-                <div class="vote-counts">
-                    <span>Likes: <span class="like-count">${movie.like_votes}</span></span>
-                    <span>Hates: <span class="hate-count">${movie.hate_votes}</span></span>
-                </div>
-                ${movie.user_id !== currentUserID ? `
-                    <div class="vote-buttons">
-                        ${movie.vote_id > 0 ? `
-                            ${movie.vote_type === 'hate' ? `
-                                        <span>You hate this movie</span>
-                                        <button onclick="updateVote(${movie.vote_id}, 'like')">Like</button>
-                                    ` : `
-                                        <span>You like this movie</span>
-                                        <button onclick="updateVote(${movie.vote_id}, 'hate')">Hate</button>
-                                    `}
-                            <button onclick="deleteVote(${movie.vote_id})">Delete</button>
-                        ` : `
-                            <button onclick="voteMovie(${movie.id}, 'like')">Like</button>
-                            <button onclick="voteMovie(${movie.id}, 'hate')">Hate</button>
-                        `}
-                    </div>
-                ` : ''}
+function renderTransactions(transactions) {
+    const transactionsContainer = document.getElementById('transactions-container');
+    transactionsContainer.innerHTML = transactions.map(transaction => `
+        <div class="transaction">
+            <p><strong>Description:</strong> ${transaction.description}</p>
+            <p><strong>Amount:</strong> $${transaction.amount.toFixed(2)}</p>
+            <p><strong>Status:</strong> ${transaction.order_status}</p>
+            <p><strong>Created At:</strong> ${new Date(transaction.created_at).toLocaleString()}</p>
+            <p><strong>Updated At:</strong> ${new Date(transaction.updated_at).toLocaleString()}</p>
+            <div class="transaction-actions">
+                <button class="btn delete-btn" onclick="deleteTransaction('${transaction.id}')">Delete</button>
             </div>
         </div>
     `).join('');
 }
 
-function sortMovies(movies) {
-    return movies.sort((a, b) => {
-        switch (sortSelect.value) {
-            case 'likes':
-                return b.like_votes - a.like_votes;
-            case 'hates':
-                return b.hate_votes - a.hate_votes;
-            default:
-                return new Date(b.date_added) - new Date(a.date_added);
+async function addTransaction() {
+    const description = document.getElementById('transaction-description').value;
+    const amount = parseFloat(document.getElementById('transaction-amount').value);  // Convert to a number
+
+    // Check if amount is a valid number
+    if (isNaN(amount) || !(amount && description)) {
+        alert('Please enter both a valid amount and description');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/transactions/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ amount, description }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add transaction');
         }
+
+        const newTransaction = await response.json();
+        console.log('New transaction added:', newTransaction);
+
+        // Extract the redirect_url from the response
+        const { redirect_url, status } = newTransaction;
+
+        // Show a pop-up with a QR code if the status is pending
+        if (status === 'pending') {
+            showQRCode(redirect_url);
+        }
+
+        // Clear the form
+        document.getElementById('transaction-amount').value = '';
+        document.getElementById('transaction-description').value = '';
+
+        await fetchAndRenderTransactions();
+    } catch (error) {
+        console.error('Error adding transaction:', error);
+        alert('Failed to add transaction. Please try again later.');
+    }
+}
+
+// Function to generate and show QR code
+function showQRCode(url) {
+
+    // Clear previous QR code (if any)
+    qrCodeContainer.innerHTML = '';
+
+    // Generate new QR code
+    const qrCode = new QRCode(qrCodeContainer, {
+        text: url,
+        width: 200,
+        height: 200,
+    });
+    qrUrl.setAttribute('href', url);
+
+    // Show the modal
+    modal.classList.remove('hidden');
+
+    // Close button event
+    document.getElementById('close-qr-btn').addEventListener('click', () => {
+        modal.classList.add('hidden');
     });
 }
 
-async function addTransaction() {
-    const title = document.getElementById('movie-title').value;
-    const description = document.getElementById('transaction-description').value;
-    const amount = document.getElementById('transaction-amount').value;
-    if (!(title && description)) {
-        alert('Please enter both title and description');
-    }
+
+async function deleteTransaction(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/movies/`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({title, description}),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to add movie');
-        }
-        const newMovie = await response.json();
-        console.log('New movie added:', newMovie);
-
-        // Clear the form
-        document.getElementById('movie-title').value = '';
-        document.getElementById('movie-description').value = '';
-
-        // Fetch and render movies again
-        await fetchAndRenderMovies();
-
-        alert('Movie added successfully!');
-
-    } catch (error) {
-        console.error('Error adding movie:', error);
-        alert('Failed to add movie. Please try again later.');
-    }
-
-}
-
-// noinspection JSUnusedGlobalSymbols
-async function voteMovie(id, voteType) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/movies/${id}/votes`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ vote_type: voteType }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to vote on movie');
-        }
-        await fetchAndRenderMovies();
-    } catch (error) {
-        console.error('Error voting on movie:', error);
-        alert('Failed to vote on movie. Please try again later.');
-    }
-}
-
-// noinspection JSUnusedGlobalSymbols
-async function updateVote(id, voteType) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/votes/${id}/`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ vote_type: voteType }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update vote');
-        }
-        await fetchAndRenderMovies();
-    } catch (error) {
-        console.error('Error voting on movie:', error);
-        alert('Failed to vote on movie. Please try again later.');
-    }
-}
-
-async function deleteVote(id) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/votes/${id}/`, {
+        const response = await fetch(`${API_BASE_URL}/api/transactions/${id}/`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${authToken}`,
@@ -213,12 +166,12 @@ async function deleteVote(id) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to delete vote');
+            throw new Error('Failed to delete transaction');
         }
-        await fetchAndRenderMovies();
+        await fetchAndRenderTransactions();
     } catch (error) {
-        console.error('Error voting on movie:', error);
-        alert('Failed to vote on movie. Please try again later.');
+        console.error('Error deleting on transaction:', error);
+        alert('Failed to delete transaction. Please try again later.');
     }
 }
 
@@ -297,7 +250,6 @@ loginBtn.addEventListener('click', login);
 signupBtn.addEventListener('click', signup);
 logoutBtn.addEventListener('click', logout);
 addTransactionBtn.addEventListener('click', addTransaction);
-sortSelect.addEventListener('change', () => fetchAndRenderMovies());
 generateAmountBtn.addEventListener('click', generateRandomAmount);
 // Initial UI update
 updateUI();

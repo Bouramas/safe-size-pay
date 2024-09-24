@@ -16,4 +16,8 @@ const (
 	OrderStatusPending = "pending"
 	OrderStatusSuccess = "success"
 	OrderStatusFailed  = "failed"
+
+	// Viva eventTypeIds - https://developer.viva.com/webhooks-for-payments/
+	TransactionPaymentCreated = 1796
+	TransactionFailed         = 1798
 )

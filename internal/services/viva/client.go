@@ -17,7 +17,7 @@ import (
 // VivaClient interface defines the methods that our client should implement
 type VivaClient interface {
 	GetToken() (*Token, error)
-	CreateOrder(request *OrderRequest) (*OrderResponse, error)
+	CreateOrder(request *CreateOrderRequest) (*CreateOrderResponse, error)
 }
 
 // client struct holds the configuration and HTTP client
@@ -80,7 +80,7 @@ func (vc *client) GetToken() (*Token, error) {
 }
 
 // CreateOrder implements the CreateOrder method of the Client interface
-func (vc *client) CreateOrder(request *OrderRequest) (*OrderResponse, error) {
+func (vc *client) CreateOrder(request *CreateOrderRequest) (*CreateOrderResponse, error) {
 	token, err := vc.GetToken()
 	if err != nil {
 		return nil, fmt.Errorf("error getting token: %v", err)
@@ -114,7 +114,7 @@ func (vc *client) CreateOrder(request *OrderRequest) (*OrderResponse, error) {
 		return nil, fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 	}
 
-	var orderResponse OrderResponse
+	var orderResponse CreateOrderResponse
 	err = json.Unmarshal(body, &orderResponse)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing order response: %v", err)

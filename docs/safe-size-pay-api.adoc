@@ -24,7 +24,8 @@ endif::[]
 
 == Overview
 
-// FIXME: UPDATE THIS
+Safe-Size Pay API exposes endpoints to create transactions and process payments through an integration with
+Viva's Smart-Checkout feature.
 
 == Resources
 
@@ -35,10 +36,9 @@ endif::[]
 include::endpoints/auth/post_signup.adoc[]
 include::endpoints/auth/post_login.adoc[]
 
-//FIXME: IMPLEMENT THOSE
 include::endpoints/transactions/get_transactions.adoc[]
 include::endpoints/transactions/post_transactions.adoc[]
-include::endpoints/webhook/get_transactions_of_user.adoc[]
-
-// NOT REQUIRED
-include::endpoints/transactions/delete_transaction.adoc[]
+include::endpoints/transactions/delete_transactions.adoc[]
+include::endpoints/transactions/get_hook.adoc[]
+// TODO: Not implemented
+// include::endpoints/transactions/post_hook.adoc[]
