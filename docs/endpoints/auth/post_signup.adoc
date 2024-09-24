@@ -1,0 +1,47 @@
+=== User Signup
+
+Create a user account by providing name, email and password
+
+==== Request
+
+[source,subs="verbatim,quotes"]
+----
+*[teal]#POST#* /auth/signup
+----
+
+[source,json]
+----
+{
+    "name":"test-user",
+    "email":"random@random.com",
+    "password": "test"
+}
+----
+
+===== Parameters
+
+[cols="1,1,1,6",options="header"]
+|===
+| Property         | Type    | Required | Description
+| name             | string  | Yes      | The name of the user
+| email            | string  | No       | The email of the user
+| password         | string  | No       | The password to be used for the user
+|===
+
+==== Response
+
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+----
+
+[source,json]
+----
+{
+  "id":"b2c3704b-b1c0-467b-bff0-cbe420aac5c3",
+  "name":"test-user",
+  "email":"random@random.com",
+  "password":"test"
+}
+----

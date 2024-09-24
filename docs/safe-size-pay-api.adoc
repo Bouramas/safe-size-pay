@@ -1,0 +1,44 @@
+= Safe-Size Pay API
+:revnumber: 1.0
+:revdate: September 20, 2024
+:source-highlighter: highlightjs
+:toc: macro
+:toclevels: 2
+:sectanchors: true
+:sectnumlevels: 5
+:includedir: ../../styles
+:title-page:
+:productname: safe-size-pay api
+:productversion: v1
+
+toc::[]
+
+<<<
+ifdef::backend-pdf[]
+
+:numbered!:
+include::{includedir}/preface.adoc[]
+
+endif::[]
+<<<
+
+== Overview
+
+// FIXME: UPDATE THIS
+
+== Resources
+
+. link:safe-size-pay-api.postman_collection.json[Postman Collection,opts=download]
+
+== API Reference
+
+include::endpoints/auth/post_signup.adoc[]
+include::endpoints/auth/post_login.adoc[]
+
+//FIXME: IMPLEMENT THOSE
+include::endpoints/transactions/get_transactions.adoc[]
+include::endpoints/transactions/post_transactions.adoc[]
+include::endpoints/webhook/get_transactions_of_user.adoc[]
+
+// NOT REQUIRED
+include::endpoints/transactions/delete_transaction.adoc[]

@@ -1,0 +1,27 @@
+=== Get Transactions
+
+Returns a list of transactions created by the user making the request
+
+==== Request
+
+[source,subs="verbatim,quotes"]
+----
+*[teal]#GET#* /api/movies/
+----
+
+include::../common/headers.adoc[]
+
+==== Response
+
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+----
+
+[source,json]
+----
+[
+    //FIXME: Add example
+]
+----

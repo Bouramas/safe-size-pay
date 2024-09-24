@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Size Payments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Safe Size Payments</h1>
+    </header>
+    <div id="welcome-message" class="hidden">
+        Welcome, <span id="current-user-name"></span>!
+    </div>
+    <nav id="user-actions">
+        <button id="login-btn" class="btn">Login</button>
+        <button id="signup-btn" class="btn">Sign Up</button>
+        <button id="logout-btn" class="btn hidden">Logout</button>
+    </nav>
+    <main>
+<!-- FIXME: -->
+        <div id="add-transaction-form" class="form-container hidden">
+            <h2>Add a Payment</h2>
+
+            <div class="amount-container">
+                <input type="text" id="transaction-amount" placeholder="Amount" readonly required>
+                <button id="generate-amount-btn" class="btn">Generate Amount</button>
+            </div>
+
+            <textarea id="transaction-description" placeholder="Description" required></textarea>
+
+            <button id="add-transaction-btn" class="btn">Add Payment</button>
+        </div>
+
+
+<!--        FIXME: REMOVE ? OR KEEP SORTING FOR -->
+        <div id="sort-options" class="hidden">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+                <option value="date">Date</option>
+                <option value="likes">Likes</option>
+                <option value="hates">Hates</option>
+            </select>
+        </div>
+
+<!--        FIXME: CHANGE TO PAYMENTS CONTAINER-->
+        <div id="transactions-container"></div>
+    </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

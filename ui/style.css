@@ -1,0 +1,132 @@
+/* styles.css */
+:root {
+    --primary-color: #00BFFF;
+    --secondary-color: #2ecc71;
+    --background-color: #ecf0f1;
+    --text-color: #2c3e50;
+    --card-background: #ffffff;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px 8px 0 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #27ae60;
+}
+
+.form-container {
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+input, textarea {
+    width: 90%;
+}
+
+#sort-options {
+    margin-bottom: 20px;
+}
+
+.movie {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.movie h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+.movie-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.like-count, .hate-count {
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.vote-counts {
+    display: flex;
+    gap: 10px;
+}
+.vote-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+#welcome-message {
+    font-weight: bold;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .movie {
+        padding: 15px;
+    }
+}
