@@ -1,0 +1,46 @@
+=== Create Transaction
+
+Create a transaction by providing an amount and a description.
+
+==== Request
+
+[source,subs="verbatim,quotes"]
+----
+*[teal]#POST#* /api/transactions/
+----
+
+include::../common/headers.adoc[]
+
+[source,json]
+----
+{
+    "amount": 12.3,
+    "description":"random-desc"
+}
+----
+
+===== Parameters
+
+[cols="1,1,1,6", options="header"]
+|===
+| Property            | Type    | Required | Description
+| amount              | float   | Yes      | The amount owed
+| description         | string  | Yes       | The description of the goods purchased
+|===
+
+==== Response
+
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+----
+
+[source,json]
+----
+{
+    "redirect_url": "https://demo.vivapayments.com/web/checkout?ref=xxx&color=00BFFF",
+    "status": "pending",
+    "id": "8948f8bb-0c6f-45f0-bbfe-3fed217be9e7"
+}
+----

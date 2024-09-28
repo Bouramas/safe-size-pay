@@ -1,0 +1,44 @@
+= Safe-Size Pay API
+:revnumber: 1.0
+:revdate: September 20, 2024
+:source-highlighter: highlightjs
+:toc: macro
+:toclevels: 2
+:sectanchors: true
+:sectnumlevels: 5
+:includedir: ../../styles
+:title-page:
+:productname: safe-size-pay api
+:productversion: v1
+
+toc::[]
+
+<<<
+ifdef::backend-pdf[]
+
+:numbered!:
+include::{includedir}/preface.adoc[]
+
+endif::[]
+<<<
+
+== Overview
+
+Safe-Size Pay API exposes endpoints to create transactions and process payments through an integration with
+Viva's Smart-Checkout feature.
+
+== Resources
+
+. link:safe-size-pay-api.postman_collection.json[Postman Collection,opts=download]
+
+== API Reference
+
+include::endpoints/auth/post_signup.adoc[]
+include::endpoints/auth/post_login.adoc[]
+
+include::endpoints/transactions/get_transactions.adoc[]
+include::endpoints/transactions/post_transactions.adoc[]
+include::endpoints/transactions/delete_transactions.adoc[]
+include::endpoints/transactions/get_hook.adoc[]
+// TODO: Not implemented
+// include::endpoints/transactions/post_hook.adoc[]

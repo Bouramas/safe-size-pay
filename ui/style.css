@@ -1,0 +1,201 @@
+/* styles.css */
+:root {
+    --primary-color: #00BFFF;
+    --secondary-color: #2ecc71;
+    --background-color: #ecf0f1;
+    --text-color: #2c3e50;
+    --card-background: #ffffff;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px 8px 0 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #27ae60;
+}
+
+.form-container {
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: none; /* Disable resizing */
+    box-sizing: border-box; /* Ensure the padding and border are included in the element's total width/height */
+}
+
+input, textarea {
+    width: 90%;
+}
+
+.amount-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.amount-container input {
+    flex: 1;
+}
+
+.amount-container button {
+    white-space: nowrap;
+}
+
+.transaction-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+.tr-form-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+}
+
+#add-transaction-btn {
+    align-self: flex-end;
+}
+
+#welcome-message {
+    font-weight: bold;
+    color: white;
+}
+
+#qr-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+}
+
+#qr-modal.hidden {
+    display: none;
+}
+
+#qr-code {
+    margin-bottom: 20px;
+}
+
+.transaction {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transaction h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+.transaction-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.like-count, .hate-count {
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.vote-counts {
+    display: flex;
+    gap: 10px;
+}
+.vote-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .transaction {
+        padding: 15px;
+    }
+}

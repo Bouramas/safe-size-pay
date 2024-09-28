@@ -1,0 +1,46 @@
+=== User Login
+
+Accepts an email and a password and returns the JWT token that is to be used
+in all subsequent requests to the API as a Bearer token.
+
+==== Request
+
+[source,subs="verbatim,quotes"]
+----
+*[teal]#POST#* /auth/login/
+----
+
+[source,json]
+----
+{
+    "email":"random@random.com",
+    "password": "test"
+}
+----
+
+===== Parameters
+
+[cols="1,1,1,6",options="header"]
+|===
+| Property         | Type    | Required | Description
+| email            | string  | No       | The user's email
+| password         | string  | No       | The user's password
+|===
+
+==== Response
+
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+----
+
+
+[source,json]
+----
+{
+    "token": "eyJhbGciOiJIUzI1NiIs...",
+    "name": "user's name",
+    "id": "users' id"
+}
+----

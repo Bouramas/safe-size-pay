@@ -1,0 +1,28 @@
+=== Get Viva Hook
+
+This is the verification endpoint used by Viva to verify the endpoint in order to be used
+for a hook endpoint confirming order updates.
+
+==== Request
+
+[source,subs="verbatim,quotes"]
+----
+*[teal]#POST#* /api/transactions/hook/
+----
+
+include::../common/headers.adoc[]
+
+==== Response
+
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+----
+
+[source,json]
+----
+{
+  "key": "abc"
+}
+----
